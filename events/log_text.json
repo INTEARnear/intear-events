@@ -1,0 +1,7 @@
+{
+    "id": "log_text",
+    "description": "Fired for each smart contract log",
+    "category": "Logs",
+    "sql_insert": null,
+    "endpoints": []
+}

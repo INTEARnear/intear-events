@@ -1,0 +1,7 @@
+{
+    "id": "potlock_donation",
+    "description": "Fired when a donation is made in the Potlock protocol",
+    "category": "Potlock",
+    "sql_insert": null,
+    "endpoints": []
+} 

@@ -1,0 +1,7 @@
+{
+    "id": "newtoken_nep171",
+    "description": "Fired when a new NEP-171 token contract is created",
+    "category": "New Tokens",
+    "sql_insert": null,
+    "endpoints": []
+}

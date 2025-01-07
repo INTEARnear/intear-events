@@ -1,0 +1,7 @@
+{
+    "id": "ft_burn",
+    "description": "Fired when FTs are burned",
+    "category": "FT",
+    "sql_insert": null,
+    "endpoints": []
+}

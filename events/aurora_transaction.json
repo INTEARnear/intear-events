@@ -1,0 +1,7 @@
+{
+    "id": "aurora_transaction",
+    "description": "Fired when an Aurora transaction is processed",
+    "category": "Aurora",
+    "sql_insert": null,
+    "endpoints": []
+}

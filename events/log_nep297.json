@@ -1,0 +1,7 @@
+{
+    "id": "log_nep297",
+    "description": "Fired for each NEP-297 event emitted by a contract",
+    "category": "Logs",
+    "sql_insert": null,
+    "endpoints": []
+}

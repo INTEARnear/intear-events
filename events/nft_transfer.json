@@ -1,0 +1,7 @@
+{
+    "id": "nft_transfer",
+    "description": "Fired when NFTs are transferred or sold",
+    "category": "NFT",
+    "sql_insert": null,
+    "endpoints": []
+} 

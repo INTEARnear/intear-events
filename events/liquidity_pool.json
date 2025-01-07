@@ -1,0 +1,7 @@
+{
+    "id": "liquidity_pool",
+    "description": "Fired when someone adds or removes LP.",
+    "category": "Trade",
+    "sql_insert": null,
+    "endpoints": []
+} 

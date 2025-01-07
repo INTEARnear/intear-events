@@ -1,0 +1,32 @@
+[package]
+name = "intear-events"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+inevents = { git = "https://github.com/INTEARnear/inevents" }
+dotenvy = "0.15.7"
+log = "0.4.21"
+simple_logger = "5.0.0"
+inevents-redis = { git = "https://github.com/INTEARnear/inevents" }
+serde = "1.0.203"
+chrono = { version = "0.4.38", features = ["serde"] }
+futures = "0.3.30"
+actix = "0.13.5"
+inindexer = "0.2.0"
+schemars = "0.8.21"
+serde_json = "1.0.117"
+sqlx = { version = "0.8.1", features = [
+    "runtime-tokio",
+    "tls-rustls",
+    "postgres",
+    "macros",
+    "chrono",
+    "bigdecimal",
+] }
+semver = "1.0.23"
+num-traits = "0.2.14"
+tokio = { version = "1.40.0", features = ["rt-multi-thread", "macros"] }
+async-trait = "0.1.74"
+aurora-engine-types = "1.0.0"
