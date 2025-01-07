@@ -2,6 +2,31 @@
     "id": "log_nep297",
     "description": "Fired for each NEP-297 event emitted by a contract",
     "category": "Logs",
-    "sql_insert": null,
-    "endpoints": []
+    "sql_insert": "INSERT INTO log_nep297_events (block_height, block_timestamp_nanosec, transaction_id, receipt_id, account_id, predecessor_id, event_standard, event_version, event_event, event_data) SELECT (elem->>'block_height')::bigint, to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC', elem->>'transaction_id', elem->>'receipt_id', elem->>'account_id', elem->>'predecessor_id', elem->>'event_standard', elem->>'event_version', elem->>'event_event', (elem->>'event_data')::jsonb FROM jsonb_array_elements($1::jsonb) AS elem",
+    "endpoints": [
+        {
+            "route": "by_standard_event_newest",
+            "query": "SELECT json_build_object('block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'account_id', account_id, 'predecessor_id', predecessor_id, 'event_standard', event_standard, 'event_version', event_version, 'event_event', event_event, 'event_data', event_data) FROM log_nep297_events WHERE event_standard = ($1->>'standard') AND event_event = ($1->>'event') ORDER BY block_timestamp_nanosec DESC LIMIT 50"
+        },
+        {
+            "route": "by_standard_event_oldest",
+            "query": "SELECT json_build_object('block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'account_id', account_id, 'predecessor_id', predecessor_id, 'event_standard', event_standard, 'event_version', event_version, 'event_event', event_event, 'event_data', event_data) FROM log_nep297_events WHERE event_standard = ($1->>'standard') AND event_event = ($1->>'event') ORDER BY block_timestamp_nanosec ASC LIMIT 50"
+        },
+        {
+            "route": "by_standard_event_account_newest",
+            "query": "SELECT json_build_object('block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'account_id', account_id, 'predecessor_id', predecessor_id, 'event_standard', event_standard, 'event_version', event_version, 'event_event', event_event, 'event_data', event_data) FROM log_nep297_events WHERE event_standard = ($1->>'standard') AND event_event = ($1->>'event') AND account_id = ($1->>'account_id') ORDER BY block_timestamp_nanosec DESC LIMIT 50"
+        },
+        {
+            "route": "by_standard_event_account_oldest",
+            "query": "SELECT json_build_object('block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'account_id', account_id, 'predecessor_id', predecessor_id, 'event_standard', event_standard, 'event_version', event_version, 'event_event', event_event, 'event_data', event_data) FROM log_nep297_events WHERE event_standard = ($1->>'standard') AND event_event = ($1->>'event') AND account_id = ($1->>'account_id') ORDER BY block_timestamp_nanosec ASC LIMIT 50"
+        },
+        {
+            "route": "by_standard_event_account_version_newest",
+            "query": "SELECT json_build_object('block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'account_id', account_id, 'predecessor_id', predecessor_id, 'event_standard', event_standard, 'event_version', event_version, 'event_event', event_event, 'event_data', event_data) FROM log_nep297_events WHERE event_standard = ($1->>'standard') AND event_event = ($1->>'event') AND account_id = ($1->>'account_id') AND event_version = ($1->>'version') ORDER BY block_timestamp_nanosec DESC LIMIT 50"
+        },
+        {
+            "route": "by_standard_event_account_version_oldest",
+            "query": "SELECT json_build_object('block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'account_id', account_id, 'predecessor_id', predecessor_id, 'event_standard', event_standard, 'event_version', event_version, 'event_event', event_event, 'event_data', event_data) FROM log_nep297_events WHERE event_standard = ($1->>'standard') AND event_event = ($1->>'event') AND account_id = ($1->>'account_id') AND event_version = ($1->>'version') ORDER BY block_timestamp_nanosec ASC LIMIT 50"
+        }
+    ]
 }
