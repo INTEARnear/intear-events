@@ -1,5 +1,3 @@
-CREATE EXTENSION timescaledb;
-
 CREATE TABLE trade_swap_events (
     id BIGSERIAL,
     balance_changes JSONB NOT NULL,
