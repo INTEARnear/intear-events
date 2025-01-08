@@ -12,14 +12,14 @@ CREATE TABLE log_nep297_events (
     event_data JSONB
 );
 
-SELECT create_hypertable('log_nep297_events', 'block_timestamp', 
-    chunk_time_interval => INTERVAL '4 hours');
+SELECT create_hypertable('log_nep297_events', 'id', 
+    chunk_time_interval => 1000000);
 
 CREATE INDEX idx_log_nep297_events_standard_event 
-    ON log_nep297_events (event_standard, event_event, block_timestamp DESC);
+    ON log_nep297_events (event_standard, event_event, id DESC);
 
 CREATE INDEX idx_log_nep297_events_standard_event_account 
-    ON log_nep297_events (event_standard, event_event, account_id, block_timestamp DESC);
+    ON log_nep297_events (event_standard, event_event, account_id, id DESC);
 
 CREATE INDEX idx_log_nep297_events_standard_event_account_version 
-    ON log_nep297_events (event_standard, event_event, account_id, event_version, block_timestamp DESC);
+    ON log_nep297_events (event_standard, event_event, account_id, event_version, id DESC);

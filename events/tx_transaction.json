@@ -8,31 +8,31 @@
     "endpoints": [
         {
             "route": "by_hash",
-            "query": "SELECT json_build_object('block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id) FROM tx_transaction_events WHERE transaction_id = ($1->>'transaction_id') ORDER BY block_timestamp DESC LIMIT 50"
+            "query": "SELECT jsonb_build_object('block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id) FROM tx_transaction_events WHERE transaction_id = ($1->>'transaction_id')"
         },
         {
             "route": "latest",
-            "query": "SELECT json_build_object('block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id) FROM tx_transaction_events ORDER BY block_timestamp DESC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id)) FROM (SELECT * FROM tx_transaction_events ORDER BY id DESC LIMIT 50) subq"
         },
         {
             "route": "oldest",
-            "query": "SELECT json_build_object('block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id) FROM tx_transaction_events ORDER BY block_timestamp ASC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id)) FROM (SELECT * FROM tx_transaction_events ORDER BY id ASC LIMIT 50) subq"
         },
         {
             "route": "by_signer_newest",
-            "query": "SELECT json_build_object('block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id) FROM tx_transaction_events WHERE signer_id = ($1->>'signer_id') ORDER BY block_timestamp DESC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id)) FROM (SELECT * FROM tx_transaction_events WHERE signer_id = ($1->>'signer_id') ORDER BY id DESC LIMIT 50) subq"
         },
         {
             "route": "by_signer_oldest",
-            "query": "SELECT json_build_object('block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id) FROM tx_transaction_events WHERE signer_id = ($1->>'signer_id') ORDER BY block_timestamp ASC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id)) FROM (SELECT * FROM tx_transaction_events WHERE signer_id = ($1->>'signer_id') ORDER BY id ASC LIMIT 50) subq"
         },
         {
             "route": "by_receiver_newest",
-            "query": "SELECT json_build_object('block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id) FROM tx_transaction_events WHERE receiver_id = ($1->>'receiver_id') ORDER BY block_timestamp DESC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id)) FROM (SELECT * FROM tx_transaction_events WHERE receiver_id = ($1->>'receiver_id') ORDER BY id DESC LIMIT 50) subq"
         },
         {
             "route": "by_receiver_oldest",
-            "query": "SELECT json_build_object('block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id) FROM tx_transaction_events WHERE receiver_id = ($1->>'receiver_id') ORDER BY block_timestamp ASC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text, 'block_height', block_height, 'signer_id', signer_id, 'public_key', public_key, 'nonce', nonce, 'receiver_id', receiver_id, 'priority_fee', priority_fee, 'signature', signature, 'transaction_id', transaction_id)) FROM (SELECT * FROM tx_transaction_events WHERE receiver_id = ($1->>'receiver_id') ORDER BY id ASC LIMIT 50) subq"
         }
     ]
 }

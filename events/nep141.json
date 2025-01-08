@@ -2,6 +2,25 @@
     "id": "newtoken_nep141",
     "description": "Fired when a new NEP-141 token contract is created",
     "category": "New Tokens",
-    "sql_insert": [],
-    "endpoints": []
-} 
+    "sql_insert": [
+        "INSERT INTO newtoken_nep141_events (account_id, transaction_id, receipt_id, block_height, block_timestamp_nanosec) SELECT elem->>'account_id', elem->>'transaction_id', elem->>'receipt_id', (elem->>'block_height')::bigint, to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC' FROM jsonb_array_elements($1::jsonb) AS elem ON CONFLICT (account_id) DO NOTHING"
+    ],
+    "endpoints": [
+        {
+            "route": "newest",
+            "query": "SELECT jsonb_agg(jsonb_build_object('id', id, 'account_id', account_id, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text)) FROM (SELECT * FROM newtoken_nep141_events WHERE ($1->>'before_id' IS NULL OR id < ($1->>'before_id')::bigint) ORDER BY id DESC LIMIT 50) subq"
+        },
+        {
+            "route": "oldest",
+            "query": "SELECT jsonb_agg(jsonb_build_object('id', id, 'account_id', account_id, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text)) FROM (SELECT * FROM newtoken_nep141_events ORDER BY block_timestamp_nanosec ASC LIMIT 50) subq"
+        },
+        {
+            "route": "by_token_id",
+            "query": "SELECT jsonb_build_object('account_id', account_id, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text) FROM newtoken_nep141_events WHERE account_id = ($1->>'account_id')"
+        },
+        {
+            "route": "count",
+            "query": "SELECT to_jsonb(COUNT(*)::int) FROM newtoken_nep141_events"
+        }
+    ]
+}

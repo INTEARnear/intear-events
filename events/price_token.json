@@ -8,11 +8,11 @@
     "endpoints": [
         {
             "route": "latest_price",
-            "query": "SELECT json_build_object('price_usd', price_usd::text, 'timestamp', ((extract(epoch from timestamp) * 1000000000)::bigint)::text) FROM price_token_events WHERE token = ($1->>'token') ORDER BY timestamp DESC LIMIT 1"
+            "query": "SELECT jsonb_build_object('price_usd', price_usd::float8, 'timestamp_nanosec', ((extract(epoch from timestamp) * 1000000000)::bigint)::text) FROM price_token_events WHERE token = ($1->>'token') ORDER BY id DESC LIMIT 1"
         },
         {
             "route": "price_at_time",
-            "query": "WITH requested_time AS (SELECT to_timestamp(($1->>'timestamp')::numeric / 1000000000) at time zone 'UTC' as ts) SELECT json_build_object('price_usd', price_usd::text, 'timestamp', ((extract(epoch from timestamp) * 1000000000)::bigint)::text) FROM price_token_events, requested_time WHERE token = ($1->>'token') AND timestamp <= requested_time.ts ORDER BY timestamp DESC LIMIT 1"
+            "query": "WITH requested_time AS (SELECT to_timestamp(($1->>'timestamp')::numeric / 1000000000) at time zone 'UTC' as ts) SELECT jsonb_build_object('price_usd', price_usd::float8, 'timestamp_nanosec', ((extract(epoch from timestamp) * 1000000000)::bigint)::text) FROM price_token_events, requested_time WHERE token = ($1->>'token') AND timestamp <= requested_time.ts ORDER BY id DESC LIMIT 1"
         }
     ]
 }

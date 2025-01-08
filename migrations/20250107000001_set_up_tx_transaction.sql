@@ -11,14 +11,14 @@ CREATE TABLE tx_transaction_events (
     transaction_id TEXT NOT NULL
 );
 
-SELECT create_hypertable('tx_transaction_events', 'block_timestamp', 
-    chunk_time_interval => INTERVAL '4 hours');
+SELECT create_hypertable('tx_transaction_events', 'id', 
+    chunk_time_interval => 1000000);
 
 CREATE INDEX idx_tx_transaction_events_txid
-    ON tx_transaction_events (transaction_id, block_timestamp DESC);
+    ON tx_transaction_events (transaction_id, id DESC);
 
 CREATE INDEX idx_tx_transaction_events_signer
-    ON tx_transaction_events (signer_id, block_timestamp DESC);
+    ON tx_transaction_events (signer_id, id DESC);
 
 CREATE INDEX idx_tx_transaction_events_receiver
-    ON tx_transaction_events (receiver_id, block_timestamp DESC);
+    ON tx_transaction_events (receiver_id, id DESC);

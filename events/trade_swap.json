@@ -8,31 +8,31 @@
     "endpoints": [
         {
             "route": "by_token_newest",
-            "query": "SELECT json_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text) FROM trade_swap_events WHERE balance_changes ? ($1->>'account') ORDER BY block_timestamp DESC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text)) FROM (SELECT * FROM trade_swap_events WHERE balance_changes ? ($1->>'account') ORDER BY id DESC LIMIT 50) subq"
         },
         {
             "route": "by_token_oldest",
-            "query": "SELECT json_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text) FROM trade_swap_events WHERE balance_changes ? ($1->>'account') ORDER BY block_timestamp ASC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text)) FROM (SELECT * FROM trade_swap_events WHERE balance_changes ? ($1->>'account') ORDER BY id ASC LIMIT 50) subq"
         },
         {
             "route": "latest",
-            "query": "SELECT json_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text) FROM trade_swap_events ORDER BY block_timestamp DESC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text)) FROM (SELECT * FROM trade_swap_events ORDER BY id DESC LIMIT 50) subq"
         },
         {
             "route": "oldest",
-            "query": "SELECT json_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text) FROM trade_swap_events ORDER BY block_timestamp ASC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text)) FROM (SELECT * FROM trade_swap_events ORDER BY id ASC LIMIT 50) subq"
         },
         {
             "route": "by_trader_newest",
-            "query": "SELECT json_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text) FROM trade_swap_events WHERE trader = ($1->>'trader') ORDER BY block_timestamp DESC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text)) FROM (SELECT * FROM trade_swap_events WHERE trader = ($1->>'trader') ORDER BY id DESC LIMIT 50) subq"
         },
         {
             "route": "by_trader_oldest",
-            "query": "SELECT json_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text) FROM trade_swap_events WHERE trader = ($1->>'trader') ORDER BY block_timestamp ASC LIMIT 50"
+            "query": "SELECT jsonb_agg(jsonb_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text)) FROM (SELECT * FROM trade_swap_events WHERE trader = ($1->>'trader') ORDER BY id ASC LIMIT 50) subq"
         },
         {
             "route": "by_transaction",
-            "query": "SELECT json_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text) FROM trade_swap_events WHERE transaction_id = ($1->>'transaction_id')"
+            "query": "SELECT jsonb_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text) FROM trade_swap_events WHERE transaction_id = ($1->>'transaction_id')"
         }
     ]
 }
