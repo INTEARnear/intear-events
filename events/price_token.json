@@ -2,6 +2,17 @@
     "id": "price_token",
     "description": "Fired approximately every 1-15 seconds for each token if its price has changed.",
     "category": "Price",
-    "sql_insert": [],
-    "endpoints": []
-} 
+    "sql_insert": [
+        "INSERT INTO price_token_events (token, price_usd, timestamp) SELECT elem->>'token', (elem->>'price_usd')::numeric, to_timestamp((elem->>'timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC' FROM jsonb_array_elements($1::jsonb) AS elem"
+    ],
+    "endpoints": [
+        {
+            "route": "latest_price",
+            "query": "SELECT json_build_object('price_usd', price_usd::text, 'timestamp', ((extract(epoch from timestamp) * 1000000000)::bigint)::text) FROM price_token_events WHERE token = ($1->>'token') ORDER BY timestamp DESC LIMIT 1"
+        },
+        {
+            "route": "price_at_time",
+            "query": "WITH requested_time AS (SELECT to_timestamp(($1->>'timestamp')::numeric / 1000000000) at time zone 'UTC' as ts) SELECT json_build_object('price_usd', price_usd::text, 'timestamp', ((extract(epoch from timestamp) * 1000000000)::bigint)::text) FROM price_token_events, requested_time WHERE token = ($1->>'token') AND timestamp <= requested_time.ts ORDER BY timestamp DESC LIMIT 1"
+        }
+    ]
+}

@@ -139,7 +139,7 @@ impl HttpEndpoint for OhlcEndpoint {
 
         #[derive(Debug, FromRow)]
         struct OhlcBar {
-            time: DateTime<Utc>,
+            bucket: DateTime<Utc>,
             #[allow(dead_code)] // replaced with previous bucket's close
             open: BigDecimal,
             high: BigDecimal,
@@ -166,7 +166,7 @@ impl HttpEndpoint for OhlcEndpoint {
                         let high = record.high.max(prev_close.clone());
                         let low = record.low.min(prev_close.clone());
                         bars.push(serde_json::json!({
-                            "time": record.time.timestamp_millis(),
+                            "timestamp_millis": record.bucket.timestamp_millis(),
                             "open": prev_close.with_prec(42).to_string(),
                             "high": high.with_prec(42).to_string(),
                             "low": low.with_prec(42).to_string(),

@@ -1,7 +1,0 @@
-{
-    "id": "price_pool",
-    "description": "Fired for every trade_pool_change event, with token prices calculated, in the same format for all pools.",
-    "category": "Price",
-    "sql_insert": [],
-    "endpoints": []
-} 
