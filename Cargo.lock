@@ -1706,7 +1706,7 @@ dependencies = [
 [[package]]
 name = "inevents"
 version = "1.0.0"
-source = "git+https://github.com/INTEARnear/inevents#aeed070e06e5981539f2093e2b77bbf63b427a93"
+source = "git+https://github.com/INTEARnear/inevents#8588bc167f56da94aa806beb8819a8e75aa4d114"
 dependencies = [
  "actix",
  "actix-cors",
@@ -1737,7 +1737,7 @@ dependencies = [
 [[package]]
 name = "inevents-redis"
 version = "0.1.0"
-source = "git+https://github.com/INTEARnear/inevents#aeed070e06e5981539f2093e2b77bbf63b427a93"
+source = "git+https://github.com/INTEARnear/inevents#8588bc167f56da94aa806beb8819a8e75aa4d114"
 dependencies = [
  "anyhow",
  "dotenvy",
@@ -1833,7 +1833,7 @@ dependencies = [
 [[package]]
 name = "json-filter"
 version = "0.1.0"
-source = "git+https://github.com/INTEARnear/inevents#aeed070e06e5981539f2093e2b77bbf63b427a93"
+source = "git+https://github.com/INTEARnear/inevents#8588bc167f56da94aa806beb8819a8e75aa4d114"
 dependencies = [
  "serde",
  "serde_json",
