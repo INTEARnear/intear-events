@@ -2,6 +2,6 @@
     "id": "ft_transfer",
     "description": "Fired when FTs are transferred or sold",
     "category": "FT",
-    "sql_insert": null,
+    "sql_insert": [],
     "endpoints": []
 }

@@ -2,7 +2,9 @@
     "id": "tx_transaction",
     "description": "High-level transaction information",
     "category": "Transactions",
-    "sql_insert": "INSERT INTO tx_transaction_events (block_timestamp_nanosec, block_height, signer_id, public_key, nonce, receiver_id, priority_fee, signature, transaction_id) SELECT to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC', (elem->>'block_height')::bigint, elem->>'signer_id', elem->>'public_key', (elem->>'nonce')::bigint, elem->>'receiver_id', (elem->>'priority_fee')::bigint, elem->>'signature', elem->>'transaction_id' FROM jsonb_array_elements($1::jsonb) AS elem",
+    "sql_insert": [
+        "INSERT INTO tx_transaction_events (block_timestamp_nanosec, block_height, signer_id, public_key, nonce, receiver_id, priority_fee, signature, transaction_id) SELECT to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC', (elem->>'block_height')::bigint, elem->>'signer_id', elem->>'public_key', (elem->>'nonce')::bigint, elem->>'receiver_id', (elem->>'priority_fee')::bigint, elem->>'signature', elem->>'transaction_id' FROM jsonb_array_elements($1::jsonb) AS elem"
+    ],
     "endpoints": [
         {
             "route": "by_hash",

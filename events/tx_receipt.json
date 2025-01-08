@@ -2,6 +2,29 @@
     "id": "tx_receipt",
     "description": "High-level receipt information",
     "category": "Transactions",
-    "sql_insert": null,
-    "endpoints": []
+    "sql_insert": [
+        "INSERT INTO all_accounts (account_id) SELECT value->>'predecessor_id' FROM jsonb_array_elements($1::jsonb) ON CONFLICT DO NOTHING"
+    ],
+    "endpoints": [
+        {
+            "route": "accounts_by_prefix",
+            "query": "SELECT account_id FROM all_accounts WHERE account_id LIKE ($1->>'prefix') || '%' LIMIT 50"
+        },
+        {
+            "route": "accounts_by_suffix", 
+            "query": "SELECT account_id FROM all_accounts WHERE reverse(account_id) LIKE reverse($1->>'suffix') || '%' LIMIT 50"
+        },
+        {
+            "route": "accounts_count",
+            "query": "SELECT COUNT(*) FROM all_accounts"
+        },
+        {
+            "route": "accounts_count_by_prefix",
+            "query": "SELECT COUNT(*) FROM all_accounts WHERE account_id LIKE ($1->>'prefix') || '%'"
+        },
+        {
+            "route": "accounts_count_by_suffix",
+            "query": "SELECT COUNT(*) FROM all_accounts WHERE account_id LIKE '%' || ($1->>'suffix')"
+        }
+    ]
 } 

@@ -2,6 +2,6 @@
     "id": "newtoken_nep141",
     "description": "Fired when a new NEP-141 token contract is created",
     "category": "New Tokens",
-    "sql_insert": null,
+    "sql_insert": [],
     "endpoints": []
 } 

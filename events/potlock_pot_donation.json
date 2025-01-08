@@ -2,6 +2,6 @@
     "id": "potlock_pot_donation",
     "description": "Fired when a pot donation is made in the Potlock protocol",
     "category": "Potlock",
-    "sql_insert": null,
+    "sql_insert": [],
     "endpoints": []
 } 

@@ -2,14 +2,16 @@
     "id": "trade_swap",
     "description": "Fired when someone exchanges tokens.",
     "category": "Trade",
-    "sql_insert": "INSERT INTO trade_swap_events (balance_changes, trader, transaction_id, receipt_id, block_height, block_timestamp_nanosec) SELECT (elem->>'balance_changes')::jsonb, elem->>'trader', elem->>'transaction_id', elem->>'receipt_id', (elem->>'block_height')::bigint, to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC' FROM jsonb_array_elements($1::jsonb) AS elem",
+    "sql_insert": [
+        "INSERT INTO trade_swap_events (balance_changes, trader, transaction_id, receipt_id, block_height, block_timestamp_nanosec) SELECT (elem->>'balance_changes')::jsonb, elem->>'trader', elem->>'transaction_id', elem->>'receipt_id', (elem->>'block_height')::bigint, to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC' FROM jsonb_array_elements($1::jsonb) AS elem"
+    ],
     "endpoints": [
         {
-            "route": "by_account_newest",
+            "route": "by_token_newest",
             "query": "SELECT json_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text) FROM trade_swap_events WHERE balance_changes ? ($1->>'account') ORDER BY block_timestamp_nanosec DESC LIMIT 50"
         },
         {
-            "route": "by_account_oldest",
+            "route": "by_token_oldest",
             "query": "SELECT json_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp_nanosec) * 1000000000)::bigint)::text) FROM trade_swap_events WHERE balance_changes ? ($1->>'account') ORDER BY block_timestamp_nanosec ASC LIMIT 50"
         },
         {

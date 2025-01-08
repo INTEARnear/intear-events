@@ -2,6 +2,6 @@
     "id": "trade_pool",
     "description": "Fired for each pool a trade goes through.",
     "category": "Trade",
-    "sql_insert": null,
+    "sql_insert": [],
     "endpoints": []
 } 

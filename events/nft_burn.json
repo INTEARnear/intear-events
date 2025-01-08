@@ -2,6 +2,6 @@
     "id": "nft_burn",
     "description": "Fired when NFTs are burned",
     "category": "NFT",
-    "sql_insert": null,
+    "sql_insert": [],
     "endpoints": []
 } 

@@ -2,6 +2,6 @@
     "id": "nft_mint",
     "description": "Fired when NFTs are minted",
     "category": "NFT",
-    "sql_insert": null,
+    "sql_insert": [],
     "endpoints": []
 } 

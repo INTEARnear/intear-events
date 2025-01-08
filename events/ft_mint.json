@@ -2,6 +2,6 @@
     "id": "ft_mint",
     "description": "Fired when FTs are minted",
     "category": "FT",
-    "sql_insert": null,
+    "sql_insert": [],
     "endpoints": []
 }

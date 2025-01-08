@@ -2,7 +2,9 @@
     "id": "log_nep297",
     "description": "Fired for each NEP-297 event emitted by a contract",
     "category": "Logs",
-    "sql_insert": "INSERT INTO log_nep297_events (block_height, block_timestamp_nanosec, transaction_id, receipt_id, account_id, predecessor_id, event_standard, event_version, event_event, event_data) SELECT (elem->>'block_height')::bigint, to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC', elem->>'transaction_id', elem->>'receipt_id', elem->>'account_id', elem->>'predecessor_id', elem->>'event_standard', elem->>'event_version', elem->>'event_event', (elem->>'event_data')::jsonb FROM jsonb_array_elements($1::jsonb) AS elem",
+    "sql_insert": [
+        "INSERT INTO log_nep297_events (block_height, block_timestamp_nanosec, transaction_id, receipt_id, account_id, predecessor_id, event_standard, event_version, event_event, event_data) SELECT (elem->>'block_height')::bigint, to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC', elem->>'transaction_id', elem->>'receipt_id', elem->>'account_id', elem->>'predecessor_id', elem->>'event_standard', elem->>'event_version', elem->>'event_event', (elem->>'event_data')::jsonb FROM jsonb_array_elements($1::jsonb) AS elem"
+    ],
     "endpoints": [
         {
             "route": "by_standard_event_newest",

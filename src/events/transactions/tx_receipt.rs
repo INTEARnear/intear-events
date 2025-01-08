@@ -15,6 +15,8 @@ pub struct TxReceiptEvent {
     #[schemars(with = "String")]
     pub transaction_id: CryptoHash,
     #[schemars(with = "String")]
+    pub predecessor_id: AccountId,
+    #[schemars(with = "String")]
     pub executor_id: AccountId,
     pub success: Option<bool>,
 }

@@ -2,6 +2,6 @@
     "id": "price_token",
     "description": "Fired approximately every 1-15 seconds for each token if its price has changed.",
     "category": "Price",
-    "sql_insert": null,
+    "sql_insert": [],
     "endpoints": []
 } 
