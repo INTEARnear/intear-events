@@ -8,23 +8,23 @@
     "endpoints": [
         {
             "route": "accounts_by_prefix",
-            "query": "SELECT account_id FROM all_accounts WHERE account_id LIKE ($1->>'prefix') || '%' LIMIT 50"
+            "query": "SELECT jsonb_build_object('account_id', account_id) FROM all_accounts WHERE account_id LIKE ($1->>'prefix') || '%' LIMIT 50"
         },
         {
             "route": "accounts_by_suffix", 
-            "query": "SELECT account_id FROM all_accounts WHERE reverse(account_id) LIKE reverse($1->>'suffix') || '%' LIMIT 50"
+            "query": "SELECT jsonb_build_object('account_id', account_id) FROM all_accounts WHERE reverse(account_id) LIKE reverse($1->>'suffix') || '%' LIMIT 50"
         },
         {
             "route": "accounts_count",
-            "query": "SELECT COUNT(*) FROM all_accounts"
+            "query": "SELECT jsonb_build_object('count', COUNT(*)) FROM all_accounts"
         },
         {
             "route": "accounts_count_by_prefix",
-            "query": "SELECT COUNT(*) FROM all_accounts WHERE account_id LIKE ($1->>'prefix') || '%'"
+            "query": "SELECT jsonb_build_object('count', COUNT(*)) FROM all_accounts WHERE account_id LIKE ($1->>'prefix') || '%'"
         },
         {
             "route": "accounts_count_by_suffix",
-            "query": "SELECT COUNT(*) FROM all_accounts WHERE account_id LIKE '%' || ($1->>'suffix')"
+            "query": "SELECT jsonb_build_object('count', COUNT(*)) FROM all_accounts WHERE account_id LIKE '%' || ($1->>'suffix')"
         }
     ]
 } 
