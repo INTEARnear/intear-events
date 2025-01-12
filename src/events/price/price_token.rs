@@ -145,6 +145,7 @@ impl HttpEndpoint for OhlcEndpoint {
             high: BigDecimal,
             low: BigDecimal,
             close: BigDecimal,
+            volume: BigDecimal,
         }
 
         macro_rules! query_materialized_view {
@@ -171,6 +172,7 @@ impl HttpEndpoint for OhlcEndpoint {
                             "high": high.with_prec(42).to_string(),
                             "low": low.with_prec(42).to_string(),
                             "close": record.close.clone().with_prec(42).to_string(),
+                            "volume": record.volume.with_prec(42).to_string(),
                         }));
                         prev_close = record.close;
                     }
@@ -189,31 +191,72 @@ impl HttpEndpoint for OhlcEndpoint {
         let results = match resolution {
             OhlcResolution::OneMinute => query_materialized_view!(
                 r#"
-                    SELECT bucket, open, high, low, close
+                    SELECT 
+                        price_token_1min_ohlc.bucket, 
+                        open, 
+                        high, 
+                        low, 
+                        close,
+                        COALESCE(trading_volume_by_minute.volume * price_token_1min_ohlc.close / 1000000, 0) as volume
                     FROM price_token_1min_ohlc
-                    WHERE token = $1
-                    AND bucket < $3
-                    ORDER BY bucket DESC
+                    LEFT JOIN trading_volume_by_minute ON 
+                        trading_volume_by_minute.token_id = price_token_1min_ohlc.token AND 
+                        trading_volume_by_minute.time = price_token_1min_ohlc.bucket
+                    WHERE price_token_1min_ohlc.token = $1
+                    AND price_token_1min_ohlc.bucket < $3
+                    ORDER BY price_token_1min_ohlc.bucket DESC
                     LIMIT $2;
                     "#
             ),
             OhlcResolution::OneHour => query_materialized_view!(
                 r#"
-                    SELECT bucket, open, high, low, close
+                    WITH volume_by_hour AS (
+                        SELECT 
+                            date_trunc('hour', time) as bucket,
+                            SUM(volume) as volume
+                        FROM trading_volume_by_minute
+                        WHERE token_id = $1
+                        GROUP BY bucket
+                    )
+                    SELECT 
+                        price_token_1hour_ohlc.bucket, 
+                        open, 
+                        high, 
+                        low, 
+                        close,
+                        COALESCE(volume_by_hour.volume * price_token_1hour_ohlc.close / 1000000, 0) as volume
                     FROM price_token_1hour_ohlc
-                    WHERE token = $1
-                    AND bucket < $3
-                    ORDER BY bucket DESC
+                    LEFT JOIN volume_by_hour ON 
+                        volume_by_hour.bucket = price_token_1hour_ohlc.bucket
+                    WHERE price_token_1hour_ohlc.token = $1
+                    AND price_token_1hour_ohlc.bucket < $3
+                    ORDER BY price_token_1hour_ohlc.bucket DESC
                     LIMIT $2;
                     "#
             ),
             OhlcResolution::OneDay => query_materialized_view!(
                 r#"
-                    SELECT bucket, open, high, low, close
+                    WITH volume_by_day AS (
+                        SELECT 
+                            date_trunc('day', time) as bucket,
+                            SUM(volume) as volume
+                        FROM trading_volume_by_minute
+                        WHERE token_id = $1
+                        GROUP BY bucket
+                    )
+                    SELECT 
+                        price_token_1day_ohlc.bucket, 
+                        open, 
+                        high, 
+                        low, 
+                        close,
+                        COALESCE(volume_by_day.volume * price_token_1day_ohlc.close / 1000000, 0) as volume
                     FROM price_token_1day_ohlc
-                    WHERE token = $1
-                    AND bucket < $3
-                    ORDER BY bucket DESC
+                    LEFT JOIN volume_by_day ON 
+                        volume_by_day.bucket = price_token_1day_ohlc.bucket
+                    WHERE price_token_1day_ohlc.token = $1
+                    AND price_token_1day_ohlc.bucket < $3
+                    ORDER BY price_token_1day_ohlc.bucket DESC
                     LIMIT $2;
                     "#
             ),

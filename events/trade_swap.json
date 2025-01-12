@@ -3,7 +3,8 @@
     "description": "Fired when someone exchanges tokens.",
     "category": "Trade",
     "sql_insert": [
-        "INSERT INTO trade_swap_events (balance_changes, trader, transaction_id, receipt_id, block_height, block_timestamp) SELECT (elem->>'balance_changes')::jsonb, elem->>'trader', elem->>'transaction_id', elem->>'receipt_id', (elem->>'block_height')::bigint, to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC' FROM jsonb_array_elements($1::jsonb) AS elem"
+        "INSERT INTO trade_swap_events (balance_changes, trader, transaction_id, receipt_id, block_height, block_timestamp) SELECT (elem->>'balance_changes')::jsonb, elem->>'trader', elem->>'transaction_id', elem->>'receipt_id', (elem->>'block_height')::bigint, to_timestamp((elem->>'block_timestamp_nanosec')::numeric / 1000000000) at time zone 'UTC' FROM jsonb_array_elements($1::jsonb) AS elem",
+        "WITH flattened AS (SELECT kv.key as token_id, ABS(kv.value::numeric) as abs_balance, (elements->>'block_timestamp_nanosec')::numeric::bigint as timestamp_nanosec FROM jsonb_array_elements($1) as elements, jsonb_each_text(elements->'balance_changes') kv), summed AS (SELECT token_id, to_timestamp(timestamp_nanosec::double precision / 1000000000) as time, SUM(abs_balance) as volume FROM flattened GROUP BY token_id, timestamp_nanosec) INSERT INTO trading_volume_by_minute (token_id, time, volume) SELECT token_id, date_trunc('minute', time), volume FROM summed ON CONFLICT (token_id, time) DO UPDATE SET volume = trading_volume_by_minute.volume + EXCLUDED.volume;"
     ],
     "endpoints": [
         {
@@ -33,6 +34,30 @@
         {
             "route": "by_transaction",
             "query": "SELECT jsonb_build_object('balance_changes', balance_changes, 'trader', trader, 'transaction_id', transaction_id, 'receipt_id', receipt_id, 'block_height', block_height, 'block_timestamp_nanosec', ((extract(epoch from block_timestamp) * 1000000000)::bigint)::text) FROM trade_swap_events WHERE transaction_id = ($1->>'transaction_id')"
+        },
+        {
+            "route": "volume_1h",
+            "query": "SELECT to_jsonb(coalesce(sum(volume), 0)) as volume FROM trading_volume_by_minute WHERE token_id = ($1->>'token_id') AND time >= now() - interval '1 hour'"
+        },
+        {
+            "route": "volume_24h",
+            "query": "SELECT to_jsonb(coalesce(sum(volume), 0)) as volume FROM trading_volume_by_minute WHERE token_id = ($1->>'token_id') AND time >= now() - interval '24 hours'"
+        },
+        {
+            "route": "volume_7d",
+            "query": "SELECT to_jsonb(coalesce(sum(volume), 0)) as volume FROM trading_volume_by_minute WHERE token_id = ($1->>'token_id') AND time >= now() - interval '7 days'"
+        },
+        {
+            "route": "volume_usd_1h",
+            "query": "WITH prices AS (SELECT DISTINCT ON (trading_volume_by_minute.time) trading_volume_by_minute.time, price_usd / 1000000 as price_usd FROM trading_volume_by_minute LEFT JOIN price_token_events ON price_token_events.token = trading_volume_by_minute.token_id AND price_token_events.timestamp <= trading_volume_by_minute.time WHERE token_id = ($1->>'token_id') AND trading_volume_by_minute.time >= now() - interval '1 hour' ORDER BY trading_volume_by_minute.time, price_token_events.timestamp DESC) SELECT to_jsonb(coalesce(sum(trading_volume_by_minute.volume * prices.price_usd), 0)) as volume_usd FROM trading_volume_by_minute JOIN prices USING (time) WHERE token_id = ($1->>'token_id') AND trading_volume_by_minute.time >= now() - interval '1 hour'"
+        },
+        {
+            "route": "volume_usd_24h",
+            "query": "WITH prices AS (SELECT DISTINCT ON (trading_volume_by_minute.time) trading_volume_by_minute.time, price_usd / 1000000 as price_usd FROM trading_volume_by_minute LEFT JOIN price_token_events ON price_token_events.token = trading_volume_by_minute.token_id AND price_token_events.timestamp <= trading_volume_by_minute.time WHERE token_id = ($1->>'token_id') AND trading_volume_by_minute.time >= now() - interval '24 hours' ORDER BY trading_volume_by_minute.time, price_token_events.timestamp DESC) SELECT to_jsonb(coalesce(sum(trading_volume_by_minute.volume * prices.price_usd), 0)) as volume_usd FROM trading_volume_by_minute JOIN prices USING (time) WHERE token_id = ($1->>'token_id') AND trading_volume_by_minute.time >= now() - interval '24 hours'"
+        },
+        {
+            "route": "volume_usd_7d",
+            "query": "WITH prices AS (SELECT DISTINCT ON (trading_volume_by_minute.time) trading_volume_by_minute.time, price_usd / 1000000 as price_usd FROM trading_volume_by_minute LEFT JOIN price_token_events ON price_token_events.token = trading_volume_by_minute.token_id AND price_token_events.timestamp <= trading_volume_by_minute.time WHERE token_id = ($1->>'token_id') AND trading_volume_by_minute.time >= now() - interval '7 days' ORDER BY trading_volume_by_minute.time, price_token_events.timestamp DESC) SELECT to_jsonb(coalesce(sum(trading_volume_by_minute.volume * prices.price_usd), 0)) as volume_usd FROM trading_volume_by_minute JOIN prices USING (time) WHERE token_id = ($1->>'token_id') AND trading_volume_by_minute.time >= now() - interval '7 days'"
         }
     ]
 }
