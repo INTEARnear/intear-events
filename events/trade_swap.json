@@ -37,27 +37,27 @@
         },
         {
             "route": "volume_1h",
-            "query": "SELECT to_jsonb(coalesce(sum(volume), 0)) as volume FROM trading_volume_by_minute WHERE token_id = ($1->>'token_id') AND time >= now() - interval '1 hour'"
+            "query": "SELECT to_jsonb(coalesce(sum(volume), 0)) FROM trading_volume_by_minute WHERE token_id = ($1->>'token_id') AND time >= now() - interval '1 hour'"
         },
         {
             "route": "volume_24h",
-            "query": "SELECT to_jsonb(coalesce(sum(volume), 0)) as volume FROM trading_volume_by_minute WHERE token_id = ($1->>'token_id') AND time >= now() - interval '24 hours'"
+            "query": "SELECT to_jsonb(coalesce(sum(volume), 0)) FROM trading_volume_by_minute WHERE token_id = ($1->>'token_id') AND time >= now() - interval '24 hours'"
         },
         {
             "route": "volume_7d",
-            "query": "SELECT to_jsonb(coalesce(sum(volume), 0)) as volume FROM trading_volume_by_minute WHERE token_id = ($1->>'token_id') AND time >= now() - interval '7 days'"
+            "query": "SELECT to_jsonb(coalesce(sum(volume), 0)) FROM trading_volume_by_minute WHERE token_id = ($1->>'token_id') AND time >= now() - interval '7 days'"
         },
         {
             "route": "volume_usd_1h",
-            "query": "WITH needed_minutes AS (SELECT DISTINCT time_bucket('1 minute', time) as minute FROM trading_volume_by_minute tv WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '1 hour'), minute_prices AS (SELECT nm.minute, (SELECT last_price / 1000000 FROM price_minutes_mv WHERE token = ($1->>'token_id') AND bucket <= nm.minute ORDER BY bucket DESC LIMIT 1) as price_usd FROM needed_minutes nm) SELECT COALESCE(sum(volume * p.price_usd), 0) as volume_usd FROM trading_volume_by_minute tv JOIN minute_prices p ON time_bucket('1 minute', tv.time) = p.minute WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '1 hour'"
+            "query": "WITH needed_minutes AS (SELECT DISTINCT time_bucket('1 minute', time) as minute FROM trading_volume_by_minute tv WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '1 hour'), minute_prices AS (SELECT nm.minute, (SELECT last_price / 1000000 FROM price_minutes_mv WHERE token = ($1->>'token_id') AND bucket <= nm.minute ORDER BY bucket DESC LIMIT 1) as price_usd FROM needed_minutes nm) SELECT to_jsonb(COALESCE(sum(volume * p.price_usd), 0)) FROM trading_volume_by_minute tv JOIN minute_prices p ON time_bucket('1 minute', tv.time) = p.minute WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '1 hour'"
         },
         {
             "route": "volume_usd_24h",
-            "query": "WITH needed_hours AS (SELECT DISTINCT time_bucket('1 hour', time) as hour FROM trading_volume_by_minute tv WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '1 day'), hourly_prices AS (SELECT nh.hour, (SELECT last_price / 1000000 FROM price_minutes_mv WHERE token = ($1->>'token_id') AND bucket <= nh.hour ORDER BY bucket DESC LIMIT 1) as price_usd FROM needed_hours nh) SELECT COALESCE(sum(volume * p.price_usd), 0) as volume_usd FROM trading_volume_by_minute tv JOIN hourly_prices p ON time_bucket('1 hour', tv.time) = p.hour WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '1 day'"
+            "query": "WITH needed_hours AS (SELECT DISTINCT time_bucket('1 hour', time) as hour FROM trading_volume_by_minute tv WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '1 day'), hourly_prices AS (SELECT nh.hour, (SELECT last_price / 1000000 FROM price_minutes_mv WHERE token = ($1->>'token_id') AND bucket <= nh.hour ORDER BY bucket DESC LIMIT 1) as price_usd FROM needed_hours nh) SELECT to_jsonb(COALESCE(sum(volume * p.price_usd), 0)) FROM trading_volume_by_minute tv JOIN hourly_prices p ON time_bucket('1 hour', tv.time) = p.hour WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '1 day'"
         },
         {
             "route": "volume_usd_7d",
-            "query": "WITH needed_hours AS (SELECT DISTINCT time_bucket('1 hour', time) as hour FROM trading_volume_by_minute tv WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '7 days'), hourly_prices AS (SELECT nh.hour, (SELECT last_price / 1000000 FROM price_minutes_mv WHERE token = ($1->>'token_id') AND bucket <= nh.hour ORDER BY bucket DESC LIMIT 1) as price_usd FROM needed_hours nh) SELECT COALESCE(sum(volume * p.price_usd), 0) as volume_usd FROM trading_volume_by_minute tv JOIN hourly_prices p ON time_bucket('1 hour', tv.time) = p.hour WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '7 days'"
+            "query": "WITH needed_hours AS (SELECT DISTINCT time_bucket('1 hour', time) as hour FROM trading_volume_by_minute tv WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '7 days'), hourly_prices AS (SELECT nh.hour, (SELECT last_price / 1000000 FROM price_minutes_mv WHERE token = ($1->>'token_id') AND bucket <= nh.hour ORDER BY bucket DESC LIMIT 1) as price_usd FROM needed_hours nh) SELECT to_jsonb(COALESCE(sum(volume * p.price_usd), 0)) FROM trading_volume_by_minute tv JOIN hourly_prices p ON time_bucket('1 hour', tv.time) = p.hour WHERE tv.token_id = ($1->>'token_id') AND tv.time >= now() - interval '7 days'"
         }
     ]
 }
