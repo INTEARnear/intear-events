@@ -25,6 +25,7 @@ impl TradePoolChangeEvent {
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
 pub enum PoolType {
     Ref(RefPool),
+    Aidols(AidolsPool),
 }
 
 #[allow(clippy::enum_variant_names)]
@@ -113,4 +114,18 @@ pub struct RefRatedSwapPool {
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
     pub stop_amp_time: u64,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
+pub struct AidolsPool {
+    #[schemars(with = "String")]
+    pub token_id: AccountId,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub token_hold: Balance,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub wnear_hold: Balance,
+    pub is_deployed: bool,
+    pub is_tradable: bool,
 }
