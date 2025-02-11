@@ -26,6 +26,7 @@ impl TradePoolChangeEvent {
 pub enum PoolType {
     Ref(RefPool),
     Aidols(AidolsPool),
+    GraFun(GraFunPool),
 }
 
 #[allow(clippy::enum_variant_names)]
@@ -126,6 +127,20 @@ pub struct AidolsPool {
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
     pub wnear_hold: Balance,
+    pub is_deployed: bool,
+    pub is_tradable: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
+pub struct GraFunPool {
+    #[schemars(with = "String")]
+    pub token_id: AccountId,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub vtoken_balance: Balance,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub vnear_balance: Balance,
     pub is_deployed: bool,
     pub is_tradable: bool,
 }
