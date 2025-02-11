@@ -137,10 +137,10 @@ pub struct GraFunPool {
     pub token_id: AccountId,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub vtoken_balance: Balance,
+    pub token_hold: Balance,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub vnear_balance: Balance,
+    pub wnear_hold: Balance,
     pub is_deployed: bool,
     pub is_tradable: bool,
 }
