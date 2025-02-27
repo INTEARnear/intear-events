@@ -14,7 +14,7 @@ serde = "1.0.203"
 chrono = { version = "0.4.38", features = ["serde"] }
 futures = "0.3.30"
 actix = "0.13.5"
-inindexer = "0.2.0"
+inindexer = "2.0.0"
 schemars = "0.8.21"
 serde_json = "1.0.117"
 sqlx = { version = "0.8.1", features = [
