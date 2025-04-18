@@ -5,16 +5,16 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-inevents = { git = "https://github.com/INTEARnear/inevents" }
+inevents = { git = "https://github.com/INTEARnear/inevents", branch = "testnet" }
 dotenvy = "0.15.7"
 log = "0.4.21"
 simple_logger = "5.0.0"
-inevents-redis = { git = "https://github.com/INTEARnear/inevents" }
+inevents-redis = { git = "https://github.com/INTEARnear/inevents", branch = "testnet" }
 serde = "1.0.203"
 chrono = { version = "0.4.38", features = ["serde"] }
 futures = "0.3.30"
 actix = "0.13.5"
-inindexer = "3.0.0"
+inindexer = "4.0.0-rc.1"
 schemars = "0.8.21"
 serde_json = "1.0.117"
 sqlx = { version = "0.8.1", features = [
