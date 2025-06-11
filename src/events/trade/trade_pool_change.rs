@@ -36,6 +36,7 @@ pub enum RefPool {
     SimplePool(RefSimplePool),
     StableSwapPool(RefStableSwapPool),
     RatedSwapPool(RefRatedSwapPool),
+    DegenSwapPool(RefDegenSwapPool),
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
@@ -93,6 +94,33 @@ pub struct RefStableSwapPool {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
 pub struct RefRatedSwapPool {
+    #[schemars(with = "Vec<String>")]
+    pub token_account_ids: Vec<AccountId>,
+    pub token_decimals: Vec<u8>,
+    #[serde(with = "dec_format_vec")]
+    #[schemars(with = "Vec<String>")]
+    pub c_amounts: Vec<Balance>,
+    pub volumes: Vec<RefSwapVolume>,
+    pub total_fee: u32,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub shares_total_supply: Balance,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub init_amp_factor: u128,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub target_amp_factor: u128,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub init_amp_time: u64,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub stop_amp_time: u64,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
+pub struct RefDegenSwapPool {
     #[schemars(with = "Vec<String>")]
     pub token_account_ids: Vec<AccountId>,
     pub token_decimals: Vec<u8>,
