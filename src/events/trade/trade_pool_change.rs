@@ -26,8 +26,6 @@ impl TradePoolChangeEvent {
 pub enum PoolType {
     Ref(RefPool),
     Aidols(AidolsPool),
-    GraFun(GraFunPool),
-    Veax(VeaxPool),
 }
 
 #[allow(clippy::enum_variant_names)]
@@ -158,36 +156,4 @@ pub struct AidolsPool {
     pub wnear_hold: FtBalance,
     pub is_deployed: bool,
     pub is_tradable: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
-pub struct GraFunPool {
-    #[schemars(with = "String")]
-    pub token_id: AccountId,
-    #[serde(with = "dec_format")]
-    #[schemars(with = "String")]
-    pub token_hold: FtBalance,
-    #[serde(with = "dec_format")]
-    #[schemars(with = "String")]
-    pub wnear_hold: FtBalance,
-    pub is_deployed: bool,
-    pub is_tradable: bool,
-}
-
-#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
-#[allow(dead_code)]
-pub struct VeaxPool {
-    #[schemars(with = "(String, String)")]
-    pub pool: (AccountId, AccountId),
-    pub r#type: String,
-    /// 8 values, for each fee tier, lowest to highest
-    #[serde(with = "dec_format_vec")]
-    #[schemars(with = "Vec<String>")]
-    pub amounts_a: Vec<FtBalance>,
-    /// 8 values, for each fee tier, lowest to highest
-    #[serde(with = "dec_format_vec")]
-    #[schemars(with = "Vec<String>")]
-    pub amounts_b: Vec<FtBalance>,
-    pub sqrt_prices: Vec<f64>,
-    pub liquidities: Vec<f64>,
 }
