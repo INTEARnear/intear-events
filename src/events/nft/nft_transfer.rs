@@ -1,6 +1,6 @@
-use inindexer::near_indexer_primitives::types::{AccountId, Balance, BlockHeight};
+use inindexer::near_indexer_primitives::types::{AccountId, BlockHeight};
 use inindexer::near_indexer_primitives::CryptoHash;
-use inindexer::near_utils::{dec_format, dec_format_vec};
+use inindexer::near_utils::{dec_format, dec_format_vec, FtBalance};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -15,7 +15,7 @@ pub struct NftTransferEvent {
 
     #[serde(with = "dec_format_vec")]
     #[schemars(with = "Vec<Option<String>>")]
-    pub token_prices_near: Vec<Option<Balance>>,
+    pub token_prices_near: Vec<Option<FtBalance>>,
 
     #[schemars(with = "String")]
     pub transaction_id: CryptoHash,

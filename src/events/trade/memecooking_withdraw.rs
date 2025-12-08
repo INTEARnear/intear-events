@@ -1,6 +1,6 @@
-use inindexer::near_indexer_primitives::types::{AccountId, Balance, BlockHeight};
+use inindexer::near_indexer_primitives::types::{AccountId, BlockHeight};
 use inindexer::near_indexer_primitives::CryptoHash;
-use inindexer::near_utils::dec_format;
+use inindexer::near_utils::{dec_format, FtBalance};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -15,10 +15,10 @@ pub struct MemeCookingWithdrawEvent {
     pub receipt_id: CryptoHash,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub amount: Balance,
+    pub amount: FtBalance,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub fee: Balance,
+    pub fee: FtBalance,
     pub block_height: BlockHeight,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]

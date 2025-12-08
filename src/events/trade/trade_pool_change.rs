@@ -1,6 +1,6 @@
-use inindexer::near_indexer_primitives::types::{AccountId, Balance, BlockHeight};
+use inindexer::near_indexer_primitives::types::{AccountId, BlockHeight};
 use inindexer::near_indexer_primitives::CryptoHash;
-use inindexer::near_utils::{dec_format, dec_format_vec};
+use inindexer::near_utils::{dec_format, dec_format_vec, FtBalance};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -45,24 +45,24 @@ pub struct RefSimplePool {
     pub token_account_ids: Vec<AccountId>,
     #[serde(with = "dec_format_vec")]
     #[schemars(with = "Vec<String>")]
-    pub amounts: Vec<Balance>,
+    pub amounts: Vec<FtBalance>,
     pub volumes: Vec<RefSwapVolume>,
     pub total_fee: u32,
     pub exchange_fee: u32,
     pub referral_fee: u32,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub shares_total_supply: Balance,
+    pub shares_total_supply: FtBalance,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
 pub struct RefSwapVolume {
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub input: Balance,
+    pub input: FtBalance,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub output: Balance,
+    pub output: FtBalance,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
@@ -72,12 +72,12 @@ pub struct RefStableSwapPool {
     pub token_decimals: Vec<u8>,
     #[serde(with = "dec_format_vec")]
     #[schemars(with = "Vec<String>")]
-    pub c_amounts: Vec<Balance>,
+    pub c_amounts: Vec<FtBalance>,
     pub volumes: Vec<RefSwapVolume>,
     pub total_fee: u32,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub shares_total_supply: Balance,
+    pub shares_total_supply: FtBalance,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
     pub init_amp_factor: u128,
@@ -99,12 +99,12 @@ pub struct RefRatedSwapPool {
     pub token_decimals: Vec<u8>,
     #[serde(with = "dec_format_vec")]
     #[schemars(with = "Vec<String>")]
-    pub c_amounts: Vec<Balance>,
+    pub c_amounts: Vec<FtBalance>,
     pub volumes: Vec<RefSwapVolume>,
     pub total_fee: u32,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub shares_total_supply: Balance,
+    pub shares_total_supply: FtBalance,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
     pub init_amp_factor: u128,
@@ -126,12 +126,12 @@ pub struct RefDegenSwapPool {
     pub token_decimals: Vec<u8>,
     #[serde(with = "dec_format_vec")]
     #[schemars(with = "Vec<String>")]
-    pub c_amounts: Vec<Balance>,
+    pub c_amounts: Vec<FtBalance>,
     pub volumes: Vec<RefSwapVolume>,
     pub total_fee: u32,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub shares_total_supply: Balance,
+    pub shares_total_supply: FtBalance,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
     pub init_amp_factor: u128,
@@ -152,10 +152,10 @@ pub struct AidolsPool {
     pub token_id: AccountId,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub token_hold: Balance,
+    pub token_hold: FtBalance,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub wnear_hold: Balance,
+    pub wnear_hold: FtBalance,
     pub is_deployed: bool,
     pub is_tradable: bool,
 }
@@ -166,10 +166,10 @@ pub struct GraFunPool {
     pub token_id: AccountId,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub token_hold: Balance,
+    pub token_hold: FtBalance,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub wnear_hold: Balance,
+    pub wnear_hold: FtBalance,
     pub is_deployed: bool,
     pub is_tradable: bool,
 }
@@ -183,11 +183,11 @@ pub struct VeaxPool {
     /// 8 values, for each fee tier, lowest to highest
     #[serde(with = "dec_format_vec")]
     #[schemars(with = "Vec<String>")]
-    pub amounts_a: Vec<Balance>,
+    pub amounts_a: Vec<FtBalance>,
     /// 8 values, for each fee tier, lowest to highest
     #[serde(with = "dec_format_vec")]
     #[schemars(with = "Vec<String>")]
-    pub amounts_b: Vec<Balance>,
+    pub amounts_b: Vec<FtBalance>,
     pub sqrt_prices: Vec<f64>,
     pub liquidities: Vec<f64>,
 }

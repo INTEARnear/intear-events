@@ -1,6 +1,6 @@
-use inindexer::near_indexer_primitives::types::{AccountId, Balance, BlockHeight};
+use inindexer::near_indexer_primitives::types::{AccountId, BlockHeight};
 use inindexer::near_indexer_primitives::CryptoHash;
-use inindexer::near_utils::dec_format;
+use inindexer::near_utils::{dec_format, FtBalance};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -15,10 +15,10 @@ pub struct TradePoolEvent {
     pub token_out: AccountId,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub amount_in: Balance,
+    pub amount_in: FtBalance,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub amount_out: Balance,
+    pub amount_out: FtBalance,
 
     #[schemars(with = "String")]
     pub trader: AccountId,

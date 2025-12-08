@@ -1,6 +1,6 @@
-use inindexer::near_indexer_primitives::types::{AccountId, Balance, BlockHeight};
+use inindexer::near_indexer_primitives::types::{AccountId, BlockHeight};
 use inindexer::near_indexer_primitives::CryptoHash;
-use inindexer::near_utils::dec_format;
+use inindexer::near_utils::{dec_format, FtBalance};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -10,7 +10,7 @@ pub struct FtBurnEvent {
     pub owner_id: AccountId,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub amount: Balance,
+    pub amount: FtBalance,
     pub memo: Option<String>,
     #[schemars(with = "String")]
     pub token_id: AccountId,

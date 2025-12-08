@@ -1,6 +1,6 @@
-use inindexer::near_indexer_primitives::types::{AccountId, Balance, BlockHeight};
+use inindexer::near_indexer_primitives::types::{AccountId, BlockHeight};
 use inindexer::near_indexer_primitives::CryptoHash;
-use inindexer::near_utils::dec_format;
+use inindexer::near_utils::{dec_format, FtBalance};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -26,17 +26,17 @@ pub struct NewMemeCookingMemeEvent {
     pub decimals: u32,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub total_supply: Balance,
+    pub total_supply: FtBalance,
     pub reference: String,
     pub reference_hash: String,
     #[schemars(with = "String")]
     pub deposit_token_id: AccountId,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub soft_cap: Balance,
+    pub soft_cap: FtBalance,
     #[serde(with = "dec_format")]
     #[schemars(with = "Option<String>")]
-    pub hard_cap: Option<Balance>,
+    pub hard_cap: Option<FtBalance>,
 }
 
 impl NewMemeCookingMemeEvent {

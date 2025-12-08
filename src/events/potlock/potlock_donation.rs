@@ -1,7 +1,7 @@
 use chrono::{DateTime, Utc};
-use inindexer::near_indexer_primitives::types::{AccountId, Balance, BlockHeight};
+use inindexer::near_indexer_primitives::types::{AccountId, BlockHeight};
 use inindexer::near_indexer_primitives::CryptoHash;
-use inindexer::near_utils::dec_format;
+use inindexer::near_utils::{dec_format, FtBalance};
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -14,7 +14,7 @@ pub struct PotlockDonationEvent {
     pub donor_id: AccountId,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub total_amount: Balance,
+    pub total_amount: FtBalance,
     #[schemars(with = "String")]
     pub ft_id: AccountId,
     pub message: Option<String>,
@@ -25,12 +25,12 @@ pub struct PotlockDonationEvent {
     pub project_id: ProjectId,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    pub protocol_fee: Balance,
+    pub protocol_fee: FtBalance,
     #[schemars(with = "Option<String>")]
     pub referrer_id: Option<AccountId>,
     #[serde(with = "dec_format")]
     #[schemars(with = "Option<String>")]
-    pub referrer_fee: Option<Balance>,
+    pub referrer_fee: Option<FtBalance>,
 
     #[schemars(with = "String")]
     pub transaction_id: CryptoHash,
