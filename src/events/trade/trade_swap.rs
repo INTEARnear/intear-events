@@ -21,6 +21,9 @@ pub struct TradeSwapEvent {
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
     pub block_timestamp_nanosec: u128,
+
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub referrer: Option<String>,
 }
 
 impl TradeSwapEvent {
