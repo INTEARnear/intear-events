@@ -181,7 +181,7 @@ pub enum IntearPlachPool {
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
 pub struct IntearPlachFeeConfiguration {
-    receivers: Vec<(IntearPlachFeeReceiver, IntearPlachFeeFraction)>,
+    pub receivers: Vec<(IntearPlachFeeReceiver, IntearPlachFeeFraction)>,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
@@ -193,10 +193,10 @@ type IntearPlachFeeFraction = u32;
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
 pub struct IntearAssetWithBalance {
-    asset_id: IntearAssetId,
+    pub asset_id: IntearAssetId,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
-    balance: FtBalance,
+    pub balance: FtBalance,
 }
 
 #[derive(Debug, PartialEq, Clone)]
