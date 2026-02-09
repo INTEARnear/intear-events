@@ -187,6 +187,7 @@ pub struct IntearPlachFeeConfiguration {
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
 pub enum IntearPlachFeeReceiver {
     Account(#[schemars(with = "String")] AccountId),
+    Pool,
 }
 
 type IntearPlachFeeFraction = u32;
