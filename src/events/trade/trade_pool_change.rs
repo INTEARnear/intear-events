@@ -177,6 +177,16 @@ pub enum IntearPlachPool {
         #[schemars(with = "Option<String>")]
         total_shares: Option<FtBalance>,
     },
+    Launch {
+        #[serde(with = "dec_format")]
+        #[schemars(with = "String")]
+        near_amount: FtBalance,
+        launched_asset: IntearAssetWithBalance,
+        fees: IntearPlachFeeConfiguration,
+        #[serde(with = "dec_format")]
+        #[schemars(with = "String")]
+        phantom_liquidity_near: FtBalance,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
