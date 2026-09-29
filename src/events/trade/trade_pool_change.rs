@@ -30,6 +30,7 @@ pub enum PoolType {
     Ref(RefPool),
     Aidols(AidolsPool),
     IntearPlach(IntearPlachPool),
+    RefDcl(RefDclPool),
 }
 
 #[allow(clippy::enum_variant_names)]
@@ -146,6 +147,23 @@ pub struct RefDegenSwapPool {
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
     pub stop_amp_time: u64,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
+pub struct RefDclPool {
+    #[schemars(with = "String")]
+    pub token_x: AccountId,
+    #[schemars(with = "String")]
+    pub token_y: AccountId,
+    pub fee: u32,
+    pub point_delta: u32,
+    pub current_point: i32,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub liquidity: u128,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub liquidity_x: u128,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
