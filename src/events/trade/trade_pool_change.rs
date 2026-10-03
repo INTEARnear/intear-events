@@ -164,6 +164,12 @@ pub struct RefDclPool {
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
     pub liquidity_x: u128,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub total_x: FtBalance,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub total_y: FtBalance,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
