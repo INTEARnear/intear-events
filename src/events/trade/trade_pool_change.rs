@@ -211,6 +211,14 @@ pub enum IntearPlachPool {
         #[schemars(with = "String")]
         phantom_liquidity_near: FtBalance,
     },
+    LaunchV2 {
+        quote_asset: IntearAssetWithBalance,
+        launched_asset: IntearAssetWithBalance,
+        fees: IntearPlachFeeConfiguration,
+        #[serde(with = "dec_format")]
+        #[schemars(with = "String")]
+        phantom_liquidity: FtBalance,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
@@ -222,6 +230,7 @@ pub struct IntearPlachFeeConfiguration {
 pub enum IntearPlachFeeReceiver {
     Account(#[schemars(with = "String")] AccountId),
     Pool,
+    Community(#[schemars(with = "String")] AccountId),
 }
 
 type IntearPlachFeeFraction = u32;
