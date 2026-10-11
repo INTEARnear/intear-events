@@ -1,13 +1,12 @@
 use inevents::{
     anyhow::Context,
-    events::event::{Event, Query, QueryEndpoint},
+    events::event::Event,
     modules::{
         http_server::HttpServer, redis_to_postgres::RedisToPostgres,
         websocket_server::WebsocketServer, EventModule,
     },
 };
-use intear_events::events::price::price_token::{OhlcEndpoint, PriceTokenEvent};
-use std::{collections::HashMap, fs, sync::Arc};
+use std::{collections::HashMap, fs};
 
 #[tokio::main]
 async fn main() {
@@ -49,14 +48,7 @@ async fn main() {
                 futures.push(
                     HttpServer::new(
                         Some("https://docs.intear.tech/docs/events-api/".to_string()),
-                        HashMap::from_iter([(
-                            PriceTokenEvent::ID.to_string(),
-                            vec![QueryEndpoint {
-                                route: "ohlc".to_string(),
-                                openapi: None,
-                                query: Query::Custom(Arc::new(OhlcEndpoint)),
-                            }],
-                        )]),
+                        HashMap::new(),
                     )
                     .start(events.clone()),
                 );
