@@ -31,6 +31,7 @@ pub enum PoolType {
     Aidols(AidolsPool),
     IntearPlach(IntearPlachPool),
     RefDcl(RefDclPool),
+    IntearQoq(IntearQoqPool),
 }
 
 #[allow(clippy::enum_variant_names)]
@@ -219,6 +220,22 @@ pub enum IntearPlachPool {
         #[schemars(with = "String")]
         phantom_liquidity: FtBalance,
     },
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
+pub struct IntearQoqPool {
+    pub assets: (IntearAssetWithBalance, IntearAssetWithBalance),
+    pub decimals: (u8, u8),
+    pub amplification: u32,
+    pub oracle_key: String,
+    /// Of a whole token of the first asset in the second, with 18 decimals
+    #[serde(with = "dec_format")]
+    #[schemars(with = "Option<String>")]
+    pub last_oracle_price: Option<u128>,
+    pub fee: u32,
+    #[serde(with = "dec_format")]
+    #[schemars(with = "String")]
+    pub total_shares: FtBalance,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
