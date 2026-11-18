@@ -227,15 +227,26 @@ pub struct IntearQoqPool {
     pub assets: (IntearAssetWithBalance, IntearAssetWithBalance),
     pub decimals: (u8, u8),
     pub amplification: u32,
-    pub oracle_key: String,
-    /// Of a whole token of the first asset in the second, with 18 decimals
-    #[serde(with = "dec_format")]
-    #[schemars(with = "Option<String>")]
-    pub last_oracle_price: Option<u128>,
+    pub rate_source: IntearQoqPoolRateSource,
     pub fee: u32,
     #[serde(with = "dec_format")]
     #[schemars(with = "String")]
     pub total_shares: FtBalance,
+}
+
+#[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
+pub enum IntearQoqPoolRateSource {
+    Oracle {
+        key: String,
+        #[serde(with = "dec_format")]
+        #[schemars(with = "String")]
+        last_price: u128,
+    },
+    Fixed(
+        #[serde(with = "dec_format")]
+        #[schemars(with = "String")]
+        u128,
+    ),
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Clone, JsonSchema)]
